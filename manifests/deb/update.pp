@@ -6,7 +6,8 @@ class repo::deb::update {
         command     => "/usr/bin/apt-get update && /usr/bin/apt-get autoclean",
         loglevel => info,
         # Another Semaphor for all packages to reference
-        alias => "apt_updated"
+        alias => "apt_updated",
+        timeout => 0,
     }
     
 }
