@@ -1,17 +1,21 @@
 ################################################################################
 # NEVER USE THIS DIRECTLY : use repo::define
 ################################################################################
-define repo::deb::define ( $file_name, $url, $sections, $source, $installed, $key, $key_server ) {
+define repo::deb::define ( $file_name, $url, $distribution, $sections, $source, $installed, $key, $key_server ) {
     
     include stdlib
     
     $sections_string = join($sections, ' ')
+    $components = $distribution ? {
+        "" => "${::lsbdistcodename} ${sections_string}",
+        default => "",
+    }
     
     file {"/etc/apt/sources.list.d/${file_name}.list":
         ensure  => $installed ? { true => present, default => absent },
         content => $source ? {
-            true    => inline_template ("deb ${url} ${::lsbdistcodename} ${sections_string} \ndeb-src ${url} ${::lsbdistcodename} ${sections_string} \n"),
-            default => inline_template ("deb ${url} ${::lsbdistcodename} ${sections_string} \n")
+            true    => inline_template ("deb ${url} ${distribution} ${components} \ndeb-src ${url} ${distribution} ${components} \n"),
+            default => inline_template ("deb ${url} ${distribution} ${components} \n")
         },
         before  => Exec["repo-update"],
         notify  => Exec["repo-update"],

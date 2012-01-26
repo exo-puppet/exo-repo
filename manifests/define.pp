@@ -19,6 +19,11 @@
 #   
 #   specify the root url of the repository (ubuntu example: http://apt.puppetlabs.com/ubuntu)
 #
+# [+distribution+]
+#   (OPTIONAL) (default: "" ) 
+#   
+#   distribution can specify an exact path, in which case the sections (components) must be omitted and distribution  must  end  with a slash (/).
+#
 # [+sections+]
 #   (OPTIONAL) (default: ["main"] ) 
 #   
@@ -64,10 +69,13 @@
 #   }
 #
 ################################################################################
-define repo::define ( $file_name="", $url, $sections = ["main"], $source = true, $installed = true, $key = "", $key_server = "keyserver.ubuntu.com" ) {
+define repo::define ( $file_name="", $url, $distribution = "", $sections = ["main"], $source = true, $installed = true, $key = "", $key_server = "keyserver.ubuntu.com" ) {
     case $::operatingsystem {
         /(Ubuntu)/: {
-            
+
+            if $distribution != "" and $distribution !~ /\/$/ {
+                fail ("If defined the distribution must always end with a / character")
+            }
             if ( $installed == true ) {
                 info ("Installing ${title} ${::operatingsystem} repository")
             } else {
@@ -79,16 +87,18 @@ define repo::define ( $file_name="", $url, $sections = ["main"], $source = true,
                     /(''|"")/   => $title,
                     default     => $file_name,
                 },
-                url         => $url,
-                sections    => $sections,
-                source      => $source,
-                installed   => $installed,
-                key         => $key,
-                key_server  => $key_server,
+                url          => $url,
+                distribution => $distribution,
+                sections     => $sections,
+                source       => $source,
+                installed    => $installed,
+                key          => $key,
+                key_server   => $key_server,
             }
         }
         default: {
             fail ("The ${module_name} module is not supported on $::operatingsystem")
         }
     }
+
 }
