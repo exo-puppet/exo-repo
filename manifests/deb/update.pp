@@ -7,6 +7,8 @@ class repo::deb::update {
         loglevel => info,
         # Another Semaphor for all packages to reference
         alias => "apt_updated",
+        # It can be long and create zombie processes
+        timeout => 0,
     }
     
 }
