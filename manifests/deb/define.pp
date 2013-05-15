@@ -7,8 +7,8 @@ define repo::deb::define ( $file_name, $url, $distribution, $sections, $source, 
     
     $sections_string = join($sections, ' ')
     $components = $distribution ? {
-        "" => "${::lsbdistcodename} ${sections_string}",
-        default => "",
+        ""      => "${::lsbdistcodename} ${sections_string}",
+        default => "${sections_string}",
     }
     
     file {"/etc/apt/sources.list.d/${file_name}.list":

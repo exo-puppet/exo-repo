@@ -22,8 +22,6 @@
 # [+distribution+]
 #   (OPTIONAL) (default: "" ) 
 #   
-#   distribution can specify an exact path, in which case the sections (components) must be omitted and distribution  must  end  with a slash (/).
-#
 # [+sections+]
 #   (OPTIONAL) (default: ["main"] ) 
 #   
@@ -73,9 +71,6 @@ define repo::define ( $file_name="", $url, $distribution = "", $sections = ["mai
     case $::operatingsystem {
         /(Ubuntu)/: {
 
-            if $distribution != "" and $distribution !~ /\/$/ {
-                fail ("If defined the distribution must always end with a / character")
-            }
             if ( $installed == true ) {
                 info ("Installing ${title} ${::operatingsystem} repository")
             } else {
