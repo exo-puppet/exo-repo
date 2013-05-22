@@ -2,25 +2,31 @@
 # NEVER USE THIS DIRECTLY : use repo::define
 ################################################################################
 define repo::deb::define ( $file_name, $url, $distribution, $sections, $source, $installed, $key, $key_server ) {
-    
+
     include stdlib
-    
+
     $sections_string = join($sections, ' ')
-    $components = $distribution ? {
-        ""      => "${::lsbdistcodename} ${sections_string}",
-        default => "${sections_string}",
+
+    if $distribution == "" {
+      $components = "${::lsbdistcodename} ${sections_string}"
+    } elsif $distribution =~ /\/$/ {
+      # we ignore the sections if the distribution ends with a / (slash)
+      info ("As the distribution parameter ends with a / we ignore the sections parameter")
+      $components = "${distribution}"
+    } else {
+      $components = "${distribution} ${sections_string}"
     }
-    
+
     file {"/etc/apt/sources.list.d/${file_name}.list":
         ensure  => $installed ? { true => present, default => absent },
         content => $source ? {
-            true    => inline_template ("deb ${url} ${distribution} ${components} \ndeb-src ${url} ${distribution} ${components} \n"),
-            default => inline_template ("deb ${url} ${distribution} ${components} \n")
+            true    => inline_template ("deb ${url} ${components} \ndeb-src ${url} ${components} \n"),
+            default => inline_template ("deb ${url} ${components} \n")
         },
         before  => Exec["repo-update"],
         notify  => Exec["repo-update"],
     }
-    
+
     if ( $key != "" ) {
         info ("Manage GPG Key ${key} installation")
         exec { "gpg-key-${key}":

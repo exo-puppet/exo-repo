@@ -22,6 +22,8 @@
 # [+distribution+]
 #   (OPTIONAL) (default: "" ) 
 #   
+#   distribution can specify an exact path, in which case the sections (components) must be omitted and distribution  must  end  with a slash (/).
+#
 # [+sections+]
 #   (OPTIONAL) (default: ["main"] ) 
 #   
