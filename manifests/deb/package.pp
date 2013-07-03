@@ -22,7 +22,7 @@ define repo::deb::package ( $pkg, $preseed ) {
         require     => File [ "preseed-${name}" ],
     }
 
-    package { $pkg:
+    package { $title:
         ensure  => installed,
         name => $pkg,
         require => [ Exec [ "preseed-${name}-load" ], Exec ['repo-update'],  ]
@@ -30,7 +30,7 @@ define repo::deb::package ( $pkg, $preseed ) {
 
   } else {
 
-    package { $pkg:
+    package { $title:
         ensure  => installed,
         name => $pkg,
         require => Exec ['repo-update']
