@@ -2,11 +2,15 @@
 # NEVER USE THIS DIRECTLY : use repo::package
 ################################################################################
 define repo::deb::package (
+  $ensure,
   $pkg,
   $preseed) {
   if ($preseed) {
     file { "preseed-${name}":
-      ensure  => present,
+      ensure  => $ensure ? {
+        /(absent|purged)/ => absent,
+        default => present
+      },
       path    => "${repo::params::preseed_dir}/${name}.preseed",
       owner   => $repo::params::preseed_owner,
       group   => $repo::params::preseed_group,
@@ -23,7 +27,7 @@ define repo::deb::package (
     }
 
     package { $title:
-      ensure  => installed,
+      ensure  => $ensure,
       name    => $pkg,
       require => [
         Exec["preseed-${name}-load"],
@@ -32,7 +36,7 @@ define repo::deb::package (
 
   } else {
     package { $title:
-      ensure  => installed,
+      ensure  => $ensure,
       name    => $pkg,
       require => Exec['repo-update']
     }
