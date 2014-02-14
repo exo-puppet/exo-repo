@@ -26,18 +26,16 @@ define repo::deb::package (
       require  => File["preseed-${name}"],
     }
 
-    package { $title:
+    package { $pkg:
       ensure  => $ensure,
-      name    => $pkg,
       require => [
         Exec["preseed-${name}-load"],
         Exec['repo-update'],]
     }
 
   } else {
-    package { $title:
+    package { $pkg:
       ensure  => $ensure,
-      name    => $pkg,
       require => Exec['repo-update']
     }
 
