@@ -9,7 +9,7 @@ class repo::deb::config {
     ensure  => directory,
     owner   => root,
     group   => root,
-    mode    => 644,
+    mode    => '0644',
     require => Class['repo::install'],
   }
 
