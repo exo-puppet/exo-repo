@@ -1,0 +1,30 @@
+{
+    "author": "eXo",
+    "license": "LGPLv3",
+    "name": "exo/repo",
+    "summary": "Manage several package repositories type.",
+    "project_page": "https://github.com/exo-puppet/exo-repo",
+    "source": "https://github.com/exo-puppet/exo-repo",
+    "issues_url": "https://github.com/exo-puppet/exo-repo/issues",
+    "operatingsystem_support": [
+        {
+            "operatingsystem": "Ubuntu",
+            "operatingsystemrelease": [ 
+                "10.04",
+                "12.04",
+                "14.04"
+            ]
+        }
+    ],
+    "requirements": [
+        {
+            "name": "puppet",
+            "version_requirement": "3.x"
+        }
+    ],
+    "dependencies": [
+        {"name":"puppetlabs/apt","version_requirement":"1.7.x"}
+    ],
+    "tags": [],
+    "version": "1.0.0"
+}
