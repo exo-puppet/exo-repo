@@ -3,8 +3,6 @@ class repo::deb::config {
   file { [
     '/etc/apt/',
     '/etc/apt/apt.conf.d',
-    '/etc/apt/preferences.d',
-    '/etc/apt/sources.list.d',
     '/etc/apt/trusted.gpg.d']:
     ensure  => directory,
     owner   => root,
