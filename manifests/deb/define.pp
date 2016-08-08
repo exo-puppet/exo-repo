@@ -42,7 +42,7 @@ define repo::deb::define (
 
     exec { "gpg-key-${key}":
       command  => "/usr/bin/gpg --keyserver ${key_server} --recv-key ${key} && /usr/bin/gpg -a --export ${key} | /usr/bin/apt-key add -",
-      unless   => "/usr/bin/apt-key list | grep ${key} | grep -v 'expired\|revoked'",
+      unless   => "/usr/bin/apt-key list | grep ${key} | grep -v 'expired|revoked'",
       loglevel => info,
     }
   }
